@@ -1,0 +1,77 @@
+name: CI/CD for Spring Boot with Docker
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: JDK 설정
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Gradle 빌드
+        run: ./gradlew clean build
+
+      - name: Docker 이미지 빌드
+        run: |
+          docker build -t everytime-dev .
+
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: JDK 설정
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Gradle 빌드 (테스트 포함)
+        run: ./gradlew clean build
+
+      - name: Docker 로그인
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Docker 이미지 빌드 & 푸시
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/everytime:latest .
+          docker push ${{ secrets.DOCKER_USERNAME }}/everytime:latest
+
+      - name: EC2에 SSH 접속하여 컨테이너 재배포
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            # 기존 컨테이너 정리
+            docker stop everytime || true
+            docker rm everytime || true
+
+            # 최신 이미지 받기
+            docker pull ${{ secrets.DOCKER_USERNAME }}/everytime:latest
+
+            # 새 컨테이너 실행 (환경변수 주입)
+            docker run -d -p 8080:8080 \
+              -e DB_URL='${{ secrets.DB_URL }}' \
+              -e DB_USERNAME='${{ secrets.DB_USERNAME }}' \
+              -e DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+              --name everytime \
+              ${{ secrets.DOCKER_USERNAME }}/everytime:latest
