@@ -1,17 +1,22 @@
 package com.everytime.domain.review.dto.response;
 
 import com.everytime.domain.review.domain.Review;
+import lombok.Builder;
+import lombok.Getter;
 
-public record ReviewResponse(
-        int rate,
-        String lecture,
-        String content
-) {
+@Getter
+@Builder
+public class ReviewResponse {
+
+    private int rate;
+    private String lecture;
+    private String content;
+
     public static ReviewResponse from(Review review) {
-        return new ReviewResponse(
-                review.getRate(),
-                review.getLecture(),
-                review.getContent()
-        );
+        return ReviewResponse.builder()
+                .rate(review.getRate())
+                .lecture(review.getLecture())
+                .content(review.getContent())
+                .build();
     }
 }
