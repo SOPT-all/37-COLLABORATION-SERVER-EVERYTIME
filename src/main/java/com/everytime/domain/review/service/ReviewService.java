@@ -13,8 +13,8 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public List<ReviewResponse> getReviews() {
-        return reviewRepository.findAll()
+    public List<ReviewResponse> getRecentReviews() {
+        return reviewRepository.findTop3ByOrderByCreatedAtDesc()
                 .stream()
                 .map(ReviewResponse::from)
                 .toList();

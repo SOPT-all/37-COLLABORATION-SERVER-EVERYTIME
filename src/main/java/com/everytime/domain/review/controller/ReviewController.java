@@ -19,8 +19,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public BaseResponse<List<ReviewResponse>> getAllReviews() {
-        List<ReviewResponse> response = reviewService.getReviews();
-        return BaseResponse.ok(ReviewSuccessCode.GET_ALL_REVIEWS.getMsg(), response);
+    public BaseResponse<List<ReviewResponse>> getRecentReviews() {
+        List<ReviewResponse> response = reviewService.getRecentReviews();
+        return BaseResponse.ok(ReviewSuccessCode.GET_RECENT_REVIEWS.getMsg(), response);
     }
 }
