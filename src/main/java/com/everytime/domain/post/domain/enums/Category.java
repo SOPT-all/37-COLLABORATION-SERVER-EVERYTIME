@@ -18,10 +18,9 @@ public enum Category {
     PUBLIC_OFFICER("공무원 준비생들"),
     PROMOTION("홍보게시판");
 
-    private final String description;
+    private final String korName;
 
-    Category(String description) {
-        this.description = description;
+    Category(String korName) {
+        this.korName = korName;
     }
-
 }
