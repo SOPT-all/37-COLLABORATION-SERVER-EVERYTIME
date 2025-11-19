@@ -42,4 +42,11 @@ public class PostService {
 
         return RealtimePostResponse.from(post);
     }
+
+    public List<PostSummaryResponse> getHotPosts() {
+        List<Post> posts = postRepository.findTop4ByOrderByLikeCountDescCreatedAtDesc();
+        return posts.stream()
+                .map(PostSummaryResponse::from)
+                .toList();
+    }
 }
