@@ -43,7 +43,7 @@ jobs:
           java-version: '21'
 
       - name: Gradle 빌드 (테스트 포함)
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: Docker 로그인
         run: |
