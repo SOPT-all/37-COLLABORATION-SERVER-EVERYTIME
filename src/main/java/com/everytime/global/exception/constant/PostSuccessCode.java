@@ -5,7 +5,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public enum PostSuccessCode implements SuccessCode {
-    GET_ALL_POSTS_BY_CATEGORY(HttpStatus.OK.value(), "카테고리 별 상위 4개 게시글 조회 완료");
+    GET_ALL_POSTS_BY_CATEGORY(HttpStatus.OK.value(), "카테고리 별 상위 4개 게시글 조회 완료"),
+    GET_REALTIME_POST(HttpStatus.OK.value(), "실시간 인기 게시글 조회 완료");
 
     private final int status;
     private final String msg;
