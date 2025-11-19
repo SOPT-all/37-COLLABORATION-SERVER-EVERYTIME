@@ -1,6 +1,7 @@
 package com.everytime.domain.post.controller;
 
 import com.everytime.domain.post.dto.response.CategoryPostResponse;
+import com.everytime.domain.post.dto.response.PostSummaryResponse;
 import com.everytime.domain.post.dto.response.RealtimePostResponse;
 import com.everytime.domain.post.service.PostService;
 import com.everytime.global.exception.constant.PostSuccessCode;
@@ -28,6 +29,12 @@ public class PostController {
     public BaseResponse<RealtimePostResponse> getRealtimePost() {
         RealtimePostResponse response = postService.getRealtimePost();
         return BaseResponse.ok(PostSuccessCode.GET_REALTIME_POST.getMsg(), response);
+    }
+
+    @GetMapping("/hot")
+    public BaseResponse<List<PostSummaryResponse>> getHotPosts() {
+        List<PostSummaryResponse> response = postService.getHotPosts();
+        return BaseResponse.ok(PostSuccessCode.GET_HOT_POSTS.getMsg(), response);
     }
 
 }
