@@ -4,7 +4,10 @@ import com.everytime.domain.post.domain.Post;
 import com.everytime.domain.post.domain.enums.Category;
 import com.everytime.domain.post.dto.response.CategoryPostResponse;
 import com.everytime.domain.post.dto.response.PostSummaryResponse;
+import com.everytime.domain.post.dto.response.RealtimePostResponse;
 import com.everytime.domain.post.repository.PostRepository;
+import com.everytime.global.exception.CustomException;
+import com.everytime.global.exception.constant.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +37,12 @@ public class PostService {
                             .build();
                 })
                 .toList();
+    }
+
+    public RealtimePostResponse getRealtimePost() {
+        Post post = postRepository.findTopByOrderByLikeCountDescCreatedAtDesc()
+                .orElseThrow(()-> new CustomException(PostErrorCode.POST_NOT_FOUND));
+
+        return RealtimePostResponse.from(post);
     }
 }
