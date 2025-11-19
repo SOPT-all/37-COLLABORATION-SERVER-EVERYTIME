@@ -23,7 +23,7 @@ public class Post extends BaseTimeEntity {
     private int likeCount;
     private int commentCount;
     @Column(nullable = false)
-    private Boolean isAnonymous;
+    private boolean isAnonymous;
     @Column(nullable = false, length = 50)
     private String nickname;
     @Enumerated(EnumType.STRING)
