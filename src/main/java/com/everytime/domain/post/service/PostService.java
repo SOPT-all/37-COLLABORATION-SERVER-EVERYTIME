@@ -31,17 +31,14 @@ public class PostService {
                             .map(PostSummaryResponse::from)
                             .toList();
 
-                    return CategoryPostResponse.builder()
-                            .category(category.getKorName())
-                            .posts(postDtos)
-                            .build();
+                    return CategoryPostResponse.from(category, postDtos);
                 })
                 .toList();
     }
 
     public RealtimePostResponse getRealtimePost() {
         Post post = postRepository.findTopByOrderByLikeCountDescCreatedAtDesc()
-                .orElseThrow(()-> new CustomException(PostErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
 
         return RealtimePostResponse.from(post);
     }
