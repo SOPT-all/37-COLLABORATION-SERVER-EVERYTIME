@@ -22,7 +22,6 @@ public class PostSearchService {
 
     public PostSearchPageResponse search(PostSearchRequest request) {
 
-        // 입력 category 검증 + 대문자로 통일
         String categoryInput = request.getCategory();
         Category category;
 
@@ -32,11 +31,9 @@ public class PostSearchService {
             throw new IllegalArgumentException("Invalid category: " + categoryInput);
         }
 
-        // keyword null 방지 + trim
         String keyword = request.getKeyword() == null ? "" : request.getKeyword().trim();
 
-        // page / size 기본값 처리
-        int page = request.getPage() == null ? 0 : request.getPage();
+        int page = request.getPage() == null ? 0 : request.getPage() - 1;
         int size = request.getSize() == null ? 20 : request.getSize();
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
@@ -56,15 +53,12 @@ public class PostSearchService {
         List<PostSearchResponse> posts = result.getContent().stream()
                 .map(post -> PostSearchResponse.from(
                         post,
-                        category.name(),
-                        keyword
+                        category.name()
                 ))
                 .toList();
 
         return PostSearchPageResponse.builder()
-                .category(category.name())
-                .keyword(keyword)
-                .currentPage(result.getNumber())
+                .currentPage(result.getNumber() + 1)
                 .totalPages(result.getTotalPages())
                 .size(result.getNumberOfElements())
                 .totalSize(result.getTotalElements())
