@@ -70,6 +70,7 @@ jobs:
 
             # 새 컨테이너 실행 (환경변수 주입)
             docker run -d -p 8080:8080 \
+              -e SPRING_PROFILES_ACTIVE=prod \
               -e DB_URL='${{ secrets.DB_URL }}' \
               -e DB_USERNAME='${{ secrets.DB_USERNAME }}' \
               -e DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
