@@ -12,6 +12,7 @@ public class PostSearchPageResponse {
     private int currentPage;
     private int totalPages;
     private int size;
+    private int currentSize;
     private long totalSize;
     private boolean hasPrevious;
     private boolean hasNext;
