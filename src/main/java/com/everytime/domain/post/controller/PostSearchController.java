@@ -62,9 +62,12 @@ public class PostSearchController {
                 .size(size)
                 .build();
 
-        return BaseResponse.ok(
-                SearchSuccessCode.GET_POST_SEARCH_RESULT.getMsg(),
-                postSearchService.search(request)
-        );
+        PostSearchPageResponse response = postSearchService.search(request);
+
+        String message = (response.getTotalSize() == 0)
+                ? SearchSuccessCode.GET_POST_SEARCH_EMPTY.getMsg()
+                : SearchSuccessCode.GET_POST_SEARCH_RESULT.getMsg();
+
+        return BaseResponse.ok(message, response);
     }
 }
