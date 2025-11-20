@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop4ByCategoryOrderByCreatedAtDesc(Category category);
     Optional<Post> findTopByOrderByLikeCountDescCreatedAtDesc();
+    List<Post> findTop4ByOrderByLikeCountDescCreatedAtDesc();
 }
