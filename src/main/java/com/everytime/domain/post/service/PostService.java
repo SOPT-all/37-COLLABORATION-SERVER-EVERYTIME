@@ -37,10 +37,9 @@ public class PostService {
     }
 
     public RealtimePostResponse getRealtimePost() {
-        Post post = postRepository.findTopByOrderByLikeCountDescCreatedAtDesc()
-                .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
-
-        return RealtimePostResponse.from(post);
+        return postRepository.findTopByOrderByLikeCountDescCreatedAtDesc()
+                .map(RealtimePostResponse::from)
+                .orElse(null);
     }
 
     public List<PostSummaryResponse> getHotPosts() {
