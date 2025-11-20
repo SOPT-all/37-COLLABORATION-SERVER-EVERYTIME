@@ -1,0 +1,38 @@
+package com.everytime.domain.post.controller;
+
+import com.everytime.domain.post.dto.request.PostSearchRequest;
+import com.everytime.domain.post.dto.response.PostSearchPageResponse;
+import com.everytime.domain.post.service.PostSearchService;
+import com.everytime.global.exception.constant.SearchSuccessCode;
+import com.everytime.global.response.BaseResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/posts")
+public class PostSearchController {
+
+    private final PostSearchService postSearchService;
+
+    @GetMapping("/search")
+    public BaseResponse<PostSearchPageResponse> search(
+            @RequestParam String category,
+            @RequestParam String keyword,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        PostSearchRequest request = PostSearchRequest.builder()
+                .category(category)
+                .keyword(keyword)
+                .page(page)
+                .size(size)
+                .build();
+
+        return BaseResponse.ok(
+                SearchSuccessCode.GET_POST_SEARCH_RESULT.getMsg(),
+                postSearchService.search(request)
+        );
+    }
+
+}
