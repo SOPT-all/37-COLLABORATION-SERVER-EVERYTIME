@@ -9,9 +9,6 @@ import java.util.List;
 @Builder
 public class PostSearchPageResponse {
 
-    private String category;
-    private String keyword;
-
     private int currentPage;
     private int totalPages;
     private int size;
