@@ -10,6 +10,7 @@ public class ReviewResponse {
     private Long id;
     private int rate;
     private String lecture;
+    private String professor;
     private String content;
 
     public static ReviewResponse from(Review review) {
@@ -17,6 +18,7 @@ public class ReviewResponse {
                 .id(review.getId())
                 .rate(review.getRate())
                 .lecture(review.getLecture())
+                .professor(review.getProfessor())
                 .content(review.getContent())
                 .build();
     }
