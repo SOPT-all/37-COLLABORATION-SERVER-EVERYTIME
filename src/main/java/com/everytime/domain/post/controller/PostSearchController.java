@@ -1,5 +1,6 @@
 package com.everytime.domain.post.controller;
 
+import com.everytime.domain.post.domain.enums.Category;
 import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.service.PostSearchService;
@@ -22,9 +23,12 @@ public class PostSearchController {
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
+        Category parsedCategory = Category.valueOf(category.trim().toUpperCase());
+        String safeKeyword = (keyword == null) ? "" : keyword.trim();
+
         PostSearchRequest request = PostSearchRequest.builder()
-                .category(category)
-                .keyword(keyword)
+                .category(parsedCategory.name())
+                .keyword(safeKeyword)
                 .page(page)
                 .size(size)
                 .build();

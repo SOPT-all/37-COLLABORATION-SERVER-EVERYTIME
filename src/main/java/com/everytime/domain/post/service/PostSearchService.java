@@ -22,9 +22,8 @@ public class PostSearchService {
 
     public PostSearchPageResponse search(PostSearchRequest request) {
 
-        Category category = Category.valueOf(request.getCategory().trim().toUpperCase());
-
-        String keyword = request.getKeyword() == null ? "" : request.getKeyword().trim();
+        Category category = Category.valueOf(request.getCategory());
+        String keyword = request.getKeyword();
 
         int page = request.getPage() == null ? 0 : request.getPage() - 1;
         int size = request.getSize() == null ? 20 : request.getSize();
