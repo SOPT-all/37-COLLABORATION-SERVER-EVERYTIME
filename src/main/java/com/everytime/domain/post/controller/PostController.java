@@ -28,7 +28,12 @@ public class PostController {
     @GetMapping("/realtime")
     public BaseResponse<RealtimePostResponse> getRealtimePost() {
         RealtimePostResponse response = postService.getRealtimePost();
-        return BaseResponse.ok(PostSuccessCode.GET_REALTIME_POST.getMsg(), response);
+
+        String msg = (response == null)
+                ? PostSuccessCode.GET_REALTIME_POST.getMsg()
+                : PostSuccessCode.REALTIME_POST_EMPTY.getMsg();
+
+        return BaseResponse.ok(msg, response);
     }
 
     @GetMapping("/hot")
