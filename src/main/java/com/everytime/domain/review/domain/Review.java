@@ -25,6 +25,9 @@ public class Review extends BaseTimeEntity {
     @Column(nullable = false)
     private String lecture;
 
+    @Column(nullable = false)
+    private String professor;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 }
