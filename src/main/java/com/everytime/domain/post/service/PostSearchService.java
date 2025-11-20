@@ -22,14 +22,7 @@ public class PostSearchService {
 
     public PostSearchPageResponse search(PostSearchRequest request) {
 
-        String categoryInput = request.getCategory();
-        Category category;
-
-        try {
-            category = Category.valueOf(categoryInput.toUpperCase().trim());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid category: " + categoryInput);
-        }
+        Category category = Category.valueOf(request.getCategory().trim().toUpperCase());
 
         String keyword = request.getKeyword() == null ? "" : request.getKeyword().trim();
 
