@@ -1,6 +1,7 @@
 package com.everytime.domain.post.dto.response;
 
 import com.everytime.domain.post.domain.Post;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,20 +20,20 @@ public class PostSearchResponse {
     private int likeCount;
     private int commentCount;
     private LocalDateTime createdAt;
-    private boolean isAnonymous;
+    @JsonProperty("isAnonymous")
+    private boolean anonymous;
     private String nickname;
 
-    public static PostSearchResponse from(Post post, String category, String keyword){
+    public static PostSearchResponse from(Post post, String category){
         return PostSearchResponse.builder()
                 .category(category)
-                .keyword(keyword)
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
                 .createdAt(post.getCreatedAt())
-                .isAnonymous(post.isAnonymous())
+                .anonymous(post.isAnonymous())
                 .nickname(post.getNickname())
                 .build();
     }
