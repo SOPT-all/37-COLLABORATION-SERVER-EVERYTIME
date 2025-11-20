@@ -17,8 +17,8 @@ public class PostSearchRequest {
     public PostSearchRequest(String category, String keyword, Integer page, Integer size) {
         this.category = category;
         this.keyword = keyword;
-        this.page = (page == null ? 0 : page);
-        this.size = (size == null ? 20 : size);
+        this.page = page;
+        this.size = size;
     }
 }
 
