@@ -24,7 +24,11 @@ public class SwaggerConfig {
         localServer.setUrl("http://localhost:8080");
         localServer.setDescription("Local Server");
 
+        Server prodServer = new Server();
+        prodServer.setUrl("http://43.201.216.56");
+        prodServer.setDescription("Prod Server");
+
         return new OpenAPI()
-                .servers(List.of(localServer));
+                .servers(List.of(localServer, prodServer));
     }
 }
