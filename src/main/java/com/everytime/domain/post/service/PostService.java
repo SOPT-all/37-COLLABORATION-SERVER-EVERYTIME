@@ -23,6 +23,7 @@ public class PostService {
 
     public List<CategoryPostResponse> getAllPostsByCategory() {
         return Arrays.stream(Category.values())
+                .filter(category -> category != Category.ALL)
                 .map(category ->
                 {
                     List<Post> posts = postRepository.findTop4ByCategoryOrderByCreatedAtDesc(category);
