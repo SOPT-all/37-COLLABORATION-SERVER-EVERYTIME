@@ -16,16 +16,16 @@ public interface PostSearchRepository extends JpaRepository<Post, Long> {
     @Query("""
     SELECT p FROM Post p
     WHERE p.category = :category
-      AND (LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-        OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%')))
-    ORDER BY p.createdAt DESC
+      AND (
+            LOWER(p.title)   LIKE LOWER(CONCAT('%', :keyword, '%'))
+         OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+      )
 """)
     Page<Post> searchPosts(
             @Param("category") Category category,
             @Param("keyword") String keyword,
             Pageable pageable
     );
-
 
     // 전체 카테고리 대상 검색 (ALL)
     @Query("""
