@@ -4,6 +4,8 @@ import com.everytime.domain.post.domain.enums.Category;
 import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.service.PostSearchService;
+import com.everytime.global.exception.CustomException;
+import com.everytime.global.exception.constant.SearchErrorCode;
 import com.everytime.global.exception.constant.SearchSuccessCode;
 import com.everytime.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +25,44 @@ public class PostSearchController {
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
-        Category parsedCategory = Category.valueOf(category.trim().toUpperCase());
-        String safeKeyword = (keyword == null) ? "" : keyword.trim();
+        // category 검증
+        if (category == null || category.trim().isEmpty()) {
+            throw new CustomException(SearchErrorCode.CATEGORY_REQUIRED);
+        }
 
+        final Category parsedCategory;
+        try {
+            parsedCategory = Category.valueOf(category.trim().toUpperCase());
+        } catch (Exception e) {
+            throw new CustomException(SearchErrorCode.CATEGORY_INVALID);
+        }
+
+        // keyword 검증
+        if (keyword == null || keyword.trim().isEmpty()) {
+            throw new CustomException(SearchErrorCode.KEYWORD_REQUIRED);
+        }
+        String safeKeyword = keyword.trim();
+        if (safeKeyword.length() < 2) {
+            throw new CustomException(SearchErrorCode.KEYWORD_TOO_SHORT);
+        }
+
+        // page / size 검증
+        int safePage = (page == null) ? 1 : page;
+        int safeSize = (size == null) ? 20 : size;
+
+        if (safePage < 1) {
+            throw new CustomException(SearchErrorCode.PAGE_INVALID);
+        }
+        if (safeSize < 1) {
+            throw new CustomException(SearchErrorCode.SIZE_INVALID);
+        }
+
+        // DTO로 변환
         PostSearchRequest request = PostSearchRequest.builder()
                 .category(parsedCategory.name())
                 .keyword(safeKeyword)
-                .page(page)
-                .size(size)
+                .page(safePage)
+                .size(safeSize)
                 .build();
 
         return BaseResponse.ok(
@@ -38,5 +70,4 @@ public class PostSearchController {
                 postSearchService.search(request)
         );
     }
-
 }
