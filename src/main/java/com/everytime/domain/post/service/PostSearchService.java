@@ -24,7 +24,7 @@ public class PostSearchService {
 
     public PostSearchPageResponse search(PostSearchRequest request) {
 
-        Category category = Category.valueOf(request.getCategory());
+        Category category = request.getCategory();
         String keyword = request.getKeyword();
 
         int page = request.getPage() - 1;

@@ -56,7 +56,7 @@ public class PostSearchController {
 
         // DTO로 변환
         PostSearchRequest request = PostSearchRequest.builder()
-                .category(parsedCategory.name())
+                .category(parsedCategory)
                 .keyword(safeKeyword)
                 .page(page)
                 .size(size)

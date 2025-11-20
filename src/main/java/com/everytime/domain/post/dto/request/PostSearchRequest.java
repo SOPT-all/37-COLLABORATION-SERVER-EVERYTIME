@@ -1,5 +1,6 @@
 package com.everytime.domain.post.dto.request;
 
+import com.everytime.domain.post.domain.enums.Category;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostSearchRequest {
 
-    private String category;
+    private Category category;
     private String keyword;
     private int page;
     private int size;
 
     @Builder
-    public PostSearchRequest(String category, String keyword, int page, int size) {
+    public PostSearchRequest(Category category, String keyword, int page, int size) {
         this.category = category;
         this.keyword = keyword;
         this.page = page;
