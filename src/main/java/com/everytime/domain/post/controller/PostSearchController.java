@@ -22,8 +22,8 @@ public class PostSearchController {
     public BaseResponse<PostSearchPageResponse> search(
             @RequestParam String category,
             @RequestParam String keyword,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size
     ) {
         // category 검증
         if (category == null || category.trim().isEmpty()) {
@@ -46,14 +46,11 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.KEYWORD_TOO_SHORT);
         }
 
-        // page / size 검증
-        int safePage = (page == null) ? 1 : page;
-        int safeSize = (size == null) ? 20 : size;
 
-        if (safePage < 1) {
+        if (page < 1) {
             throw new CustomException(SearchErrorCode.PAGE_INVALID);
         }
-        if (safeSize < 1) {
+        if (size < 1) {
             throw new CustomException(SearchErrorCode.SIZE_INVALID);
         }
 
@@ -61,8 +58,8 @@ public class PostSearchController {
         PostSearchRequest request = PostSearchRequest.builder()
                 .category(parsedCategory.name())
                 .keyword(safeKeyword)
-                .page(safePage)
-                .size(safeSize)
+                .page(page)
+                .size(size)
                 .build();
 
         return BaseResponse.ok(

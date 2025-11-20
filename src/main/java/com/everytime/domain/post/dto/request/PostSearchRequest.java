@@ -10,11 +10,11 @@ public class PostSearchRequest {
 
     private String category;
     private String keyword;
-    private Integer page;
-    private Integer size;
+    private int page;
+    private int size;
 
     @Builder
-    public PostSearchRequest(String category, String keyword, Integer page, Integer size) {
+    public PostSearchRequest(String category, String keyword, int page, int size) {
         this.category = category;
         this.keyword = keyword;
         this.page = page;
