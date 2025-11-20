@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 public class PostSearchResponse {
 
     private String category;
-    private String keyword;
-
     private Long id;
     private String title;
     private String content;
