@@ -1,6 +1,7 @@
 package com.everytime.domain.post.dto.response;
 
 import com.everytime.domain.post.domain.Post;
+import com.everytime.domain.post.domain.enums.Category;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PostSearchResponse {
 
-    private String category;
+    private Category category;
     private Long id;
     private String title;
     private String content;
@@ -22,9 +23,9 @@ public class PostSearchResponse {
     private boolean anonymous;
     private String nickname;
 
-    public static PostSearchResponse from(Post post, String category){
+    public static PostSearchResponse from(Post post){
         return PostSearchResponse.builder()
-                .category(category)
+                .category(post.getCategory())
                 .id(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())

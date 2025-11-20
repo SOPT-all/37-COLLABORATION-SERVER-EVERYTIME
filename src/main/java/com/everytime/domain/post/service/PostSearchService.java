@@ -53,10 +53,7 @@ public class PostSearchService {
 
         // DTO 변환
         List<PostSearchResponse> posts = result.getContent().stream()
-                .map(post -> PostSearchResponse.from(
-                        post,
-                        category.name()
-                ))
+                .map(PostSearchResponse::from)
                 .toList();
 
         return PostSearchPageResponse.builder()
