@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum Category {
+    ALL("전체"),
     FREE("자유게시판"),
     GRADUATE("졸업생게시판"),
     ISSUE("시사·이슈"),
