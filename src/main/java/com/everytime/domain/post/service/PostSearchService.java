@@ -6,6 +6,8 @@ import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.dto.response.PostSearchResponse;
 import com.everytime.domain.post.repository.PostSearchRepository;
+import com.everytime.global.exception.CustomException;
+import com.everytime.global.exception.constant.SearchErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -32,13 +34,21 @@ public class PostSearchService {
 
         Page<Post> result;
 
-        // ALL이면: 카테고리 전체 대상 검색
+        // ALL: 카테고리 전체 대상 검색
         if (category == Category.ALL) {
             result = postSearchRepository.searchAll(keyword, pageable);
 
-            // 특정 카테고리라면: 해당 category 내에서 검색
+            // 특정 카테고리: 해당 category 내에서 검색
         } else {
             result = postSearchRepository.searchPosts(category, keyword, pageable);
+        }
+
+        // page가 전체 페이지 수보다 큰 경우 검사
+        int totalPages = result.getTotalPages();
+        int requestedPage = request.getPage();
+
+        if (totalPages > 0 && requestedPage > totalPages) {
+            throw new CustomException(SearchErrorCode.PAGE_OUT_OF_RANGE);
         }
 
         // DTO 변환
