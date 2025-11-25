@@ -2,6 +2,7 @@ package com.everytime.domain.post.service;
 
 import com.everytime.domain.post.domain.Post;
 import com.everytime.domain.post.domain.enums.Category;
+import com.everytime.domain.post.domain.enums.SearchCategory;
 import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.dto.response.PostSearchResponse;
@@ -24,7 +25,7 @@ public class PostSearchService {
 
     public PostSearchPageResponse search(PostSearchRequest request) {
 
-        Category category = request.getCategory();
+        SearchCategory searchCategory = request.getSearchCategory();
         String keyword = request.getKeyword();
 
         int page = request.getPage() - 1;
@@ -35,12 +36,13 @@ public class PostSearchService {
         Page<Post> result;
 
         // ALL: 카테고리 전체 대상 검색
-        if (category == Category.ALL) {
+        if (searchCategory == SearchCategory.ALL) {
             result = postSearchRepository.searchAll(keyword, pageable);
 
             // 특정 카테고리: 해당 category 내에서 검색
         } else {
-            result = postSearchRepository.searchPosts(category, keyword, pageable);
+            Category realCategory = Category.valueOf(searchCategory.name());
+            result = postSearchRepository.searchPosts(realCategory, keyword, pageable);
         }
 
         // page가 전체 페이지 수보다 큰 경우 검사
