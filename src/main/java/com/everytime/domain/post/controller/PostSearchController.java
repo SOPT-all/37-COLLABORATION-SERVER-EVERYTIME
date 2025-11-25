@@ -1,6 +1,7 @@
 package com.everytime.domain.post.controller;
 
 import com.everytime.domain.post.domain.enums.Category;
+import com.everytime.domain.post.domain.enums.SearchCategory;
 import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.service.PostSearchService;
@@ -30,9 +31,9 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.CATEGORY_REQUIRED);
         }
 
-        final Category parsedCategory;
+        final SearchCategory parsedCategory;
         try {
-            parsedCategory = Category.valueOf(category.trim().toUpperCase());
+            parsedCategory = SearchCategory.valueOf(category.trim().toUpperCase());
         } catch (Exception e) {
             throw new CustomException(SearchErrorCode.CATEGORY_INVALID);
         }
