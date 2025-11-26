@@ -25,7 +25,7 @@ public class SwaggerConfig {
         localServer.setDescription("Local Server");
 
         Server prodServer = new Server();
-        prodServer.setUrl("http://43.201.216.56");
+        prodServer.setUrl("https://eeverytime.shop");
         prodServer.setDescription("Prod Server");
 
         return new OpenAPI()
