@@ -16,8 +16,8 @@ public class PostSearchRequest {
     private int size;
 
     @Builder
-    public PostSearchRequest(SearchCategory category, String keyword, int page, int size) {
-        this.searchCategory = category;
+    public PostSearchRequest(SearchCategory searchCategory, String keyword, int page, int size) {
+        this.searchCategory = searchCategory;
         this.keyword = keyword;
         this.page = page;
         this.size = size;
