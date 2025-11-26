@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface PostSearchRepository extends JpaRepository<Post, Long> {
 
@@ -30,10 +32,14 @@ public interface PostSearchRepository extends JpaRepository<Post, Long> {
     // 전체 카테고리 대상 검색 (ALL)
     @Query("""
         SELECT p FROM Post p
-        WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-           OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
-        """)
-    Page<Post> searchAll(
+        WHERE p.category IN :categories
+          AND (
+                LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+             OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+          )
+    """)
+    Page<Post> searchByCategories(
+            @Param("categories") List<Category> categories,
             @Param("keyword") String keyword,
             Pageable pageable
     );
