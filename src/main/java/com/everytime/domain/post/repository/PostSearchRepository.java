@@ -13,14 +13,24 @@ import org.springframework.stereotype.Repository;
 public interface PostSearchRepository extends JpaRepository<Post, Long> {
 
     // 특정 카테고리 내 검색
-    @Query("""
-    SELECT p FROM Post p
-    WHERE p.category = :category
-      AND (
-            LOWER(p.title)   LIKE LOWER(CONCAT('%', :keyword, '%'))
-         OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
-      )
-""")
+    @Query(
+            value = """
+                SELECT p FROM Post p
+                WHERE p.category = :category
+                  AND (
+                        LOWER(p.title)   LIKE LOWER(CONCAT('%', :keyword, '%'))
+                     OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  )
+                """,
+            countQuery = """
+                SELECT COUNT(p.id) FROM Post p
+                WHERE p.category = :category
+                  AND (
+                        LOWER(p.title)   LIKE LOWER(CONCAT('%', :keyword, '%'))
+                     OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                  )
+                """
+    )
     Page<Post> searchPosts(
             @Param("category") Category category,
             @Param("keyword") String keyword,
@@ -28,11 +38,18 @@ public interface PostSearchRepository extends JpaRepository<Post, Long> {
     );
 
     // 전체 카테고리 대상 검색 (ALL)
-    @Query("""
-        SELECT p FROM Post p
-        WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
-           OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
-        """)
+    @Query(
+            value = """
+                SELECT p FROM Post p
+                WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                   OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                """,
+            countQuery = """
+                SELECT COUNT(p.id) FROM Post p
+                WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                   OR LOWER(p.content) LIKE LOWER(CONCAT('%', :keyword, '%'))
+                """
+    )
     Page<Post> searchAll(
             @Param("keyword") String keyword,
             Pageable pageable
