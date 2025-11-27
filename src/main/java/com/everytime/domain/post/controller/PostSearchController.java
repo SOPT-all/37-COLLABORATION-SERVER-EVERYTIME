@@ -30,12 +30,7 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.CATEGORY_REQUIRED);
         }
 
-        final SearchCategory parsedSearchCategory;
-        try {
-            parsedSearchCategory = SearchCategory.valueOf(category.trim().toUpperCase());
-        } catch (Exception e) {
-            throw new CustomException(SearchErrorCode.CATEGORY_INVALID);
-        }
+        SearchCategory parsedSearchCategory = SearchCategory.from(category);
 
         // keyword 검증
         if (keyword == null || keyword.trim().isEmpty()) {
