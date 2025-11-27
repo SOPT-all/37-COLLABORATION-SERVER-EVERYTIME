@@ -1,6 +1,5 @@
 package com.everytime.domain.post.controller;
 
-import com.everytime.domain.post.domain.enums.Category;
 import com.everytime.domain.post.domain.enums.SearchCategory;
 import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
@@ -31,12 +30,7 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.CATEGORY_REQUIRED);
         }
 
-        final SearchCategory parsedCategory;
-        try {
-            parsedCategory = SearchCategory.valueOf(category.trim().toUpperCase());
-        } catch (Exception e) {
-            throw new CustomException(SearchErrorCode.CATEGORY_INVALID);
-        }
+        SearchCategory parsedSearchCategory = SearchCategory.from(category);
 
         // keyword 검증
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -47,7 +41,7 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.KEYWORD_TOO_SHORT);
         }
 
-
+        // page & size 검증
         if (page < 1) {
             throw new CustomException(SearchErrorCode.PAGE_INVALID);
         }
@@ -55,9 +49,9 @@ public class PostSearchController {
             throw new CustomException(SearchErrorCode.SIZE_INVALID);
         }
 
-        // DTO로 변환
+        // DTO 생성
         PostSearchRequest request = PostSearchRequest.builder()
-                .category(parsedCategory)
+                .searchCategory(parsedSearchCategory)
                 .keyword(safeKeyword)
                 .page(page)
                 .size(size)

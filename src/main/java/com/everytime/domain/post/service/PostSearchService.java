@@ -7,6 +7,7 @@ import com.everytime.domain.post.dto.request.PostSearchRequest;
 import com.everytime.domain.post.dto.response.PostSearchPageResponse;
 import com.everytime.domain.post.dto.response.PostSearchResponse;
 import com.everytime.domain.post.repository.PostSearchRepository;
+import com.everytime.domain.post.utils.SearchCategoryUtils;
 import com.everytime.global.exception.CustomException;
 import com.everytime.global.exception.constant.SearchErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,26 +31,34 @@ public class PostSearchService {
 
         int page = request.getPage() - 1;
         int size = request.getSize();
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         Page<Post> result;
 
-        // ALL: 카테고리 전체 대상 검색
+        // 🔹 1) ALL 검색: 검색 가능한 8개 카테고리만 대상으로 검색
         if (searchCategory == SearchCategory.ALL) {
-            result = postSearchRepository.searchAll(keyword, pageable);
+            List<Category> allowed = SearchCategoryUtils.allowedCategories();
 
-            // 특정 카테고리: 해당 category 내에서 검색
+            result = postSearchRepository.searchByCategories(
+                    allowed,
+                    keyword,
+                    pageable
+            );
+
+            // 🔹 2) 특정 카테고리 검색
         } else {
-            Category realCategory = Category.valueOf(searchCategory.name());
-            result = postSearchRepository.searchPosts(realCategory, keyword, pageable);
+            Category mapped = searchCategory.getMappedCategory();
+
+            result = postSearchRepository.searchPosts(
+                    mapped,
+                    keyword,
+                    pageable
+            );
         }
 
-        // page가 전체 페이지 수보다 큰 경우 검사
+        // page 범위 검증
         int totalPages = result.getTotalPages();
-        int requestedPage = request.getPage();
-
-        if (totalPages > 0 && requestedPage > totalPages) {
+        if (totalPages > 0 && request.getPage() > totalPages) {
             throw new CustomException(SearchErrorCode.PAGE_OUT_OF_RANGE);
         }
 
