@@ -8,11 +8,13 @@ import java.util.List;
 
 public class SearchCategoryUtils {
 
-    // ALL 검색 시 포함해야 할 8개 Category 목록
+    private static final List<Category> ALLOWED_CATEGORIES =
+            Arrays.stream(SearchCategory.values())
+                    .filter(sc -> sc.getMappedCategory() != null)
+                    .map(SearchCategory::getMappedCategory)
+                    .toList();
+
     public static List<Category> allowedCategories() {
-        return Arrays.stream(SearchCategory.values())
-                .filter(sc -> sc.getMappedCategory() != null)
-                .map(SearchCategory::getMappedCategory)
-                .toList();
+        return ALLOWED_CATEGORIES;
     }
 }
