@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostRepositoryCustom {
-    List<Post> findTop4ByCategoryOrderByCreatedAtDesc(Category category);
+    List<Post> findLatest4PostsByCategory(Category category);
 
-    Optional<Post> findTopByOrderByLikeCountDescCreatedAtDesc();
+    Optional<Post> findTopRealtimePopularPost();
 
-    List<Post> findTop4ByOrderByLikeCountDescCreatedAtDesc();
+    List<Post> findTop4PopularPosts();
 }

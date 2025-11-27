@@ -6,8 +6,6 @@ import com.everytime.domain.post.dto.response.CategoryPostResponse;
 import com.everytime.domain.post.dto.response.PostSummaryResponse;
 import com.everytime.domain.post.dto.response.RealtimePostResponse;
 import com.everytime.domain.post.repository.PostRepository;
-import com.everytime.global.exception.CustomException;
-import com.everytime.global.exception.constant.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +24,7 @@ public class PostService {
                 .filter(category -> category != Category.ALL)
                 .map(category ->
                 {
-                    List<Post> posts = postRepository.findTop4ByCategoryOrderByCreatedAtDesc(category);
+                    List<Post> posts = postRepository.findLatest4PostsByCategory(category);
 
                     List<PostSummaryResponse> postDtos = posts.stream()
                             .map(PostSummaryResponse::from)
@@ -38,13 +36,13 @@ public class PostService {
     }
 
     public RealtimePostResponse getRealtimePost() {
-        return postRepository.findTopByOrderByLikeCountDescCreatedAtDesc()
+        return postRepository.findTopRealtimePopularPost()
                 .map(RealtimePostResponse::from)
                 .orElse(null);
     }
 
     public List<PostSummaryResponse> getHotPosts() {
-        List<Post> posts = postRepository.findTop4ByOrderByLikeCountDescCreatedAtDesc();
+        List<Post> posts = postRepository.findTop4PopularPosts();
         return posts.stream()
                 .map(PostSummaryResponse::from)
                 .toList();
