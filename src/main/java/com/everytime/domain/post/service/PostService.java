@@ -5,6 +5,7 @@ import com.everytime.domain.post.domain.enums.Category;
 import com.everytime.domain.post.dto.response.CategoryPostResponse;
 import com.everytime.domain.post.dto.response.PostSummaryResponse;
 import com.everytime.domain.post.dto.response.RealtimePostResponse;
+import com.everytime.domain.post.mapper.PostMapper;
 import com.everytime.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class PostService {
+
     private final PostRepository postRepository;
+    private final PostMapper postMapper;
 
     public List<CategoryPostResponse> getAllPostsByCategory() {
         return Arrays.stream(Category.values())
@@ -25,26 +28,19 @@ public class PostService {
                 .map(category ->
                 {
                     List<Post> posts = postRepository.findLatest4PostsByCategory(category);
-
-                    List<PostSummaryResponse> postDtos = posts.stream()
-                            .map(PostSummaryResponse::from)
-                            .toList();
-
-                    return CategoryPostResponse.from(category, postDtos);
+                    return postMapper.toCategoryPostResponse(category, posts);
                 })
                 .toList();
     }
 
     public RealtimePostResponse getRealtimePost() {
         return postRepository.findTopRealtimePopularPost()
-                .map(RealtimePostResponse::from)
+                .map(postMapper::toRealtimePostResponse)
                 .orElse(null);
     }
 
     public List<PostSummaryResponse> getHotPosts() {
         List<Post> posts = postRepository.findTop4PopularPosts();
-        return posts.stream()
-                .map(PostSummaryResponse::from)
-                .toList();
+        return postMapper.toPostSummaryResponseList(posts);
     }
 }
